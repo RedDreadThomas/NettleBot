@@ -1,18 +1,45 @@
 import config
 import logic
 import time
-from misc import dp, bot
+from . states import NettleBot
+from aiogram import types
+from misc import dp
 
 
 @dp.callback_query_handler(lambda c: c.data == 'remember_mod1' or c.data == 'remember_mod2')
-async def add_reminder(call):
-    reminder_session = logic.MindGame(bot, call.message, config.shelve_date)
-    reminder_level_session = logic.MindGame(bot, call.message, config.shelve_lvl_of_reminders)
-    if reminder_session.user_in_players():
-        informer_message = await call.message.answer("У вас уже созданы напоминания, если хотите создать новые, "
-                                                     "сначала удалите старые!")
-        time.sleep(3)
-        await informer_message.delete()
-    else:
-        reminder_session.add_user_to_players()
-        reminder_level_session.add_user_to_players()
+async def start_short_reminder_mod(call):
+    param = ['быстро', 'качественно']
+    await call.message.answer(f"Введите тему, которую хотите выучиить {param[int(call.data[-1])]}")
+    reminder_mod_session = logic.BotMod(call.message, config.shelve_reminders_mods, int(call.data[-1]))
+    reminder_mod_session.add_user_to_storage()
+    await NettleBot.waiting_for_name_in_remembers_new_mod.set()
+
+
+@dp.callback_query_handler(lambda c: c.data == 'remember_mod3')
+async def show_all_reminders(call):
+    reminder_date_session = logic.BotMod(call.message, config.shelve_reminders_dates)
+    reminder_session = logic.BotMod(call.message, config.shelve_reminders)
+    reminder_mod_session = logic.BotMod(call.message, config.shelve_reminders_mods)
+    reminder_level_session = logic.BotMod(call.message, config.shelve_reminders_levels)
+    mods = ['Быстрый', 'Долгий']
+    list_of_dates = reminder_date_session.get_answer()
+    list_of_reminders = reminder_session.get_answer()
+    list_of_mods = reminder_mod_session.get_answer()
+    list_of_levels = reminder_level_session.get_answer()
+    await call.message.answer(f"У вас активировано {len(list_of_dates)} нап:")
+    for i in range(len(list_of_dates)):
+        remained = (int(list_of_dates[i]) + logic.intervals_gen(int(list_of_mods[i]))[int(list_of_levels[i])] *
+                    60 - time.time()) // 60
+        await call.message.answer(f"Тема: {list_of_reminders[i]}\n"
+                                  f"Режим: {mods[int(list_of_mods[i])]}\n"
+                                  f"Осталось: {remained} мин до следующего напоминания")
+
+
+@dp.message_handler(state=NettleBot.waiting_for_name_in_remembers_new_mod, content_types=types.ContentTypes.TEXT)
+async def add_reminder(message):
+    reminder_date_session = logic.BotMod(message, config.shelve_reminders_dates)
+    reminder_level_session = logic.BotMod(message, config.shelve_reminders_levels)
+    reminder_session = logic.BotMod(message, config.shelve_reminders)
+    reminder_date_session.add_user_to_storage()
+    reminder_session.add_user_to_storage()
+    reminder_level_session.add_user_to_storage()

@@ -4,6 +4,7 @@ from handlers.main_menu_handlers import menu_command
 from misc import dp
 from emoji import emojize
 from aiogram import types
+from handlers.states import NettleBot
 
 
 @dp.callback_query_handler(lambda c: c.data == 'menu1')
@@ -44,7 +45,7 @@ async def repeat_old(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == 'menu4' or c.data == 'exit_from_info1'
-                                     or c.data == 'exit_from_communication1', state="*")
+                                     or c.data == 'exit_from_communication1')
 async def main_menu(call: types.CallbackQuery):
     """
     Эта функция возвращает пользователя в главное меню

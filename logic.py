@@ -5,15 +5,15 @@ from aiogram import types
 import time
 
 
-async def upgrade_user_level(bot, chat_id, exp, difficulty):
+async def upgrade_user_level(message, exp=0, difficulty=0):
     """
     Эта функция обновляет опыт пользователя, повышает его уровень
+    :param message:
     :param difficulty:
-    :param bot: (aiogram.Bot)
-    :param chat_id: Айди чата с пользователем
     :param exp: количество опыта, начисляемое пользователю
     :return: None
     """
+    chat_id = message.chat.id
     now_exp = shelve.open(config.shelve_now_exp)
     max_exp = shelve.open(config.shelve_max_exp)
     level = shelve.open(config.shelve_usr_level)
@@ -23,30 +23,27 @@ async def upgrade_user_level(bot, chat_id, exp, difficulty):
         now_exp[str(chat_id)] = exp * difficulty
         max_exp[str(chat_id)] = 200
         level[str(chat_id)] = 1
-    await bot.send_message(chat_id,
-                           f"Вы заработали {exp * difficulty} опыта")
+    await message.answer(f"Вы заработали {exp * difficulty} опыта")
     if max_exp[str(chat_id)] <= now_exp[str(chat_id)]:
         now_exp[str(chat_id)] -= max_exp[str(chat_id)]
         max_exp[str(chat_id)] *= 2
         level[str(chat_id)] += 1
-        await bot.send_message(chat_id,
-                               "Поздравляем, ваш уровень повышен!")
+        await message.answer("Поздравляем, ваш уровень повышен!")
     now_exp.close()
     max_exp.close()
     level.close()
 
 
-async def print_level(bot, chat_id):
+async def print_level(message):
     """
     Эта функция отправляет актуальную информацию об уровне пользователя в чат
-    :param bot: (aiogram.Bot)
-    :param chat_id: Айди чата с пользователем
     :return: None
     """
+    chat_id = message.chat.id
     now_exp = shelve.open(config.shelve_now_exp)
     max_exp = shelve.open(config.shelve_max_exp)
     level = shelve.open(config.shelve_usr_level)
-    await bot.send_message(chat_id, f"Уровень: {level[str(chat_id)]}\n{now_exp[str(chat_id)]}"
+    await message.answer(f"Уровень: {level[str(chat_id)]}\n{now_exp[str(chat_id)]}"
                                     f" опыта/{max_exp[str(chat_id)]} опыта")
 
 
@@ -112,6 +109,12 @@ def pyramid(c_str):
     return list_strings
 
 
+def intervals_gen(mod):
+    if mod == 1:
+        return [1, 5, 15, 30]
+    return [10, 60, 120]
+
+
 # Модуль отвечающий за создание кастомных InlineKeyboardMarkup
 
 
@@ -138,21 +141,19 @@ class Markup:
 # Модуль отвечающий за развивающие игры
 
 
-class MindGame:
+class BotMod:
 
-    def __init__(self, bot, message, mod_name, difficulty=0):
+    def __init__(self, message, session_name, mod=0):
         """
         Этот метод создает экземпляр игры
-        :param bot: (aiogram.Bot)
         :param message:
-        :param mod_name: (str) Строка, содержащая в себе название файла с ответами("numbers.db", "words.db")
+        :param session_name: (str) Строка, содержащая в себе название файла с ответами("numbers.db", "words.db")
         или название режима("search")
         """
         self.chat_id = message.chat.id
-        self.bot = bot
-        self.message_id = message.message_id
-        self.mod_name = mod_name
-        self.difficulty = difficulty
+        self.message = message
+        self.session_name = session_name
+        self.mod = mod
 
     def generate(self):
         """
@@ -161,34 +162,49 @@ class MindGame:
         :return: при self.mode_name = 'search' -> Название запущенной сессии
                  при self.mode_name = названию файла-хранилища -> Сгенерированное значение
         """
-        if self.mod_name == config.numbers_answers:
-            return pyramid(int(3 * self.difficulty))
-        elif self.mod_name == config.words_answers:
-            return alpha(int(10 * self.difficulty))
-        elif self.mod_name == config.shelve_date:
-            now_datetime = int(time.time())
-            return now_datetime
-        elif self.mod_name == config.shelve_lvl_of_reminders:
-            return 0
-        elif self.mod_name == 'search':
-            for db in config.list_shelve_answers:
-                try:
-                    storage = shelve.open(db)
-                    test_eq = storage[str(self.chat_id)]
-                    return db
-                except KeyError:
-                    pass
+        if self.session_name == config.numbers_answers:
+            return pyramid(int(4 * self.mod) - self.mod)
+        elif self.session_name == config.words_answers:
+            return alpha(int(8 * self.mod))
 
-    def add_user_to_players(self):
+    def add_user_to_storage(self):
         """
         Этот метод добавляет id игрока в файл shelve.db
         :return: None
         """
-        with shelve.open(self.mod_name) as storage:
-            storage[str(self.chat_id)] = self.generate()
+        if self.session_name == config.shelve_reminders_dates:
+            now_datetime = int(time.time())
+            with shelve.open(config.shelve_reminders_dates) as storage:
+                try:
+                    storage[str(self.chat_id)] += str(now_datetime) + ' '
+                except KeyError:
+                    storage[str(self.chat_id)] = str(now_datetime) + ' '
+        elif self.session_name == config.shelve_reminders_levels:
+            with shelve.open(config.shelve_reminders_levels) as storage:
+                try:
+                    storage[str(self.chat_id)] += '0 '
+                except KeyError:
+                    storage[str(self.chat_id)] = '0 '
+        elif self.session_name == config.shelve_reminders:
+            reminder = self.message.text.replace(' ', '!@$%^&*()_+')
+            with shelve.open(config.shelve_reminders) as storage:
+                try:
+                    storage[str(self.chat_id)] += f'{reminder} '
+                except KeyError:
+                    storage[str(self.chat_id)] = f'{reminder} '
+        elif self.session_name == config.shelve_reminders_mods:
+            with shelve.open(config.shelve_reminders_mods) as storage:
+                try:
+                    storage[str(self.chat_id)] += f'{self.mod} '
+                except KeyError:
+                    storage[str(self.chat_id)] = f'{self.mod} '
 
-    def user_in_players(self):
-        with shelve.open(self.mod_name) as storage:
+        else:
+            with shelve.open(self.session_name) as storage:
+                storage[str(self.chat_id)] = self.generate()
+
+    def user_in_storage(self):
+        with shelve.open(self.session_name) as storage:
             return str(self.chat_id) in storage
 
     def get_answer(self):
@@ -198,19 +214,19 @@ class MindGame:
         Можно переделать, чтобы не захламлять self.generate() проверкой
         """
 
-        with shelve.open(self.mod_name) as storage:
+        with shelve.open(self.session_name) as storage:
             try:
                 answer = storage[str(self.chat_id)]
                 return answer
             except KeyError:
                 return None
 
-    def finish_game(self):
+    def finish_session(self):
         """
         Этот метод удаляет id пользователя из хранилища с ответами
         :return: None
         """
-        with shelve.open(self.mod_name) as storage:
+        with shelve.open(self.session_name) as storage:
             try:
                 del storage[str(self.chat_id)]
             except KeyError:
