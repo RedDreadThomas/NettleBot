@@ -19,10 +19,10 @@ async def reminders_checker():
         mods = reminders_mods[usr].split(' ')
         for date in dates:
             cur_date = int(date)
-            cur_reminder = reminders[dates.index(date)].replace('!@$%^&*()_+', ' ')
-            cur_level = int(levels[dates.index(date)])
-            cur_mod = int(mods[mods[dates.index(date)]])
             cur_index = dates.index(str(cur_date))
+            cur_reminder = reminders[cur_index].replace('!@$%^&*()_+', ' ')
+            cur_level = int(levels[cur_index])
+            cur_mod = int(mods[cur_index])
             intervals = logic.intervals_gen(cur_mod)
             now_time = time.time()
             if (int(now_time) - cur_date) // 60 >= intervals[cur_level]:
