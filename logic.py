@@ -110,7 +110,7 @@ def pyramid(c_str):
 
 
 def intervals_gen(mod):
-    if mod == 1:
+    if mod == 0:
         return [1, 5, 15, 30]
     return [10, 60, 120]
 
@@ -195,9 +195,9 @@ class BotMod:
         elif self.session_name == config.shelve_reminders_mods:
             with shelve.open(config.shelve_reminders_mods) as storage:
                 try:
-                    storage[str(self.chat_id)] += f'{self.mod} '
+                    storage[str(self.chat_id)] += f'{self.mod - 1} '
                 except KeyError:
-                    storage[str(self.chat_id)] = f'{self.mod} '
+                    storage[str(self.chat_id)] = f'{self.mod - 1} '
 
         else:
             with shelve.open(self.session_name) as storage:

@@ -31,7 +31,7 @@ async def show_all_reminders(call):
     for i in range(len(list_of_dates)):
         #remained = (int(list_of_dates[i]) + logic.intervals_gen(int(list_of_mods[i]))[int(list_of_levels[i])] * 60 - int(time.time())) // 60
         await call.message.answer(f"Тема: {list_of_reminders[i].replace('!@$%^&*()_+', ' ')}\n"
-                                  f"Режим: {mods[int(list_of_mods[i]) - 1]}\n")
+                                  f"Режим: {mods[int(list_of_mods[i])]}\n")
 
 
 @dp.message_handler(state=NettleBot.waiting_for_name_in_remembers_new_mod, content_types=types.ContentTypes.TEXT)
