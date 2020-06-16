@@ -13,10 +13,10 @@ async def reminders_checker():
     reminders_reminders = shelve.open(config.shelve_reminders)
     reminders_mods = shelve.open(config.shelve_reminders_mods)
     for usr in reminders_dates:
-        dates = reminders_dates[usr].split(' ')
-        reminders = reminders_reminders[usr].split(' ')
-        levels = reminders_levels[usr].split(' ')
-        mods = reminders_mods[usr].split(' ')
+        dates = reminders_dates[usr].split(' ')[:-1]
+        reminders = reminders_reminders[usr].split(' ')[:-1]
+        levels = reminders_levels[usr].split(' ')[:-1]
+        mods = reminders_mods[usr].split(' ')[:-1]
         for date in dates:
             cur_date = int(date)
             cur_index = dates.index(str(cur_date))

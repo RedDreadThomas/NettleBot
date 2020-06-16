@@ -22,11 +22,11 @@ async def show_all_reminders(call):
     reminder_mod_session = logic.BotMod(call.message, config.shelve_reminders_mods)
     reminder_level_session = logic.BotMod(call.message, config.shelve_reminders_levels)
     mods = ['Быстрый', 'Долгий']
-    list_of_dates = reminder_date_session.get_answer().split(' ')
-    list_of_reminders = reminder_session.get_answer().split(' ')
+    list_of_dates = reminder_date_session.get_answer().split(' ')[:-1]
+    list_of_reminders = reminder_session.get_answer().split(' ')[:-1]
     print(list_of_reminders)
-    list_of_mods = reminder_mod_session.get_answer().split(' ')
-    list_of_levels = reminder_level_session.get_answer().split(' ')
+    list_of_mods = reminder_mod_session.get_answer().split(' ')[:-1]
+    list_of_levels = reminder_level_session.get_answer().split(' ')[:-1]
     await call.message.answer(f"У вас активировано {len(list_of_dates) - 1} нап:")
     for i in range(len(list_of_dates) - 1):
         #remained = (int(list_of_dates[i]) + logic.intervals_gen(int(list_of_mods[i]))[int(list_of_levels[i])] * 60 - int(time.time())) // 60
