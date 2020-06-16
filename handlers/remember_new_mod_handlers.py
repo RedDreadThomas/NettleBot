@@ -36,7 +36,7 @@ async def show_all_reminders(call):
 
 
 @dp.message_handler(state=NettleBot.waiting_for_name_in_remembers_new_mod, content_types=types.ContentTypes.TEXT)
-async def add_reminder(message, state):
+async def add_reminder(message):
     reminder_date_session = logic.BotMod(message, config.shelve_reminders_dates)
     reminder_level_session = logic.BotMod(message, config.shelve_reminders_levels)
     reminder_session = logic.BotMod(message, config.shelve_reminders)
