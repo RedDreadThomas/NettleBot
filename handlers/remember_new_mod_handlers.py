@@ -7,7 +7,7 @@ from misc import dp
 
 
 @dp.callback_query_handler(lambda c: c.data == 'remember_mod1' or c.data == 'remember_mod2')
-async def start_short_reminder_mod(call):
+async def start_reminder_mod(call):
     param = ['быстро', 'качественно']
     await call.message.answer(f"Введите тему, которую хотите выучиить {param[int(call.data[-1]) - 1]}")
     reminder_mod_session = logic.BotMod(call.message, config.shelve_reminders_mods, int(call.data[-1]))
@@ -36,10 +36,12 @@ async def show_all_reminders(call):
 
 
 @dp.message_handler(state=NettleBot.waiting_for_name_in_remembers_new_mod, content_types=types.ContentTypes.TEXT)
-async def add_reminder(message):
+async def add_reminder(message, state):
+    await state.finish()
     reminder_date_session = logic.BotMod(message, config.shelve_reminders_dates)
     reminder_level_session = logic.BotMod(message, config.shelve_reminders_levels)
     reminder_session = logic.BotMod(message, config.shelve_reminders)
     reminder_date_session.add_user_to_storage()
     reminder_session.add_user_to_storage()
     reminder_level_session.add_user_to_storage()
+    await message.answer(f'Оповещение с темой "{message.text}" создано')

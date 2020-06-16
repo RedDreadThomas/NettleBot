@@ -69,6 +69,7 @@ async def main_action_of_strange_letters_game(call):
 
 @dp.message_handler(state=NettleBot.waiting_for_answer_in_strange_letters_game, content_types=types.ContentTypes.TEXT)
 async def checker_for_answer_in_strange_letters_game(message, state):
+    await state.finish()
     chat_id = message.chat.id
     game = logic.BotMod(message, config.words_answers, logic.get_difficulty(chat_id))
     answer = game.get_answer()
