@@ -176,28 +176,28 @@ class BotMod:
             now_datetime = str(int(time.time()))
             with shelve.open(config.shelve_reminders_dates) as storage:
                 try:
-                    storage[str(self.chat_id)] += now_datetime + ' '
+                    storage[str(self.chat_id)] += ' ' + now_datetime
                 except KeyError:
-                    storage[str(self.chat_id)] = now_datetime + ' '
+                    storage[str(self.chat_id)] = now_datetime
         elif self.session_name == config.shelve_reminders_levels:
             with shelve.open(config.shelve_reminders_levels) as storage:
                 try:
-                    storage[str(self.chat_id)] += '0 '
+                    storage[str(self.chat_id)] += ' 0'
                 except KeyError:
-                    storage[str(self.chat_id)] = '0 '
+                    storage[str(self.chat_id)] = '0'
         elif self.session_name == config.shelve_reminders:
             reminder = self.message.text.replace(' ', '!@$%^&*()_+')
             with shelve.open(config.shelve_reminders) as storage:
                 try:
-                    storage[str(self.chat_id)] += f'{reminder} '
+                    storage[str(self.chat_id)] += f' {reminder}'
                 except KeyError:
-                    storage[str(self.chat_id)] = f'{reminder} '
+                    storage[str(self.chat_id)] = f'{reminder}'
         elif self.session_name == config.shelve_reminders_mods:
             with shelve.open(config.shelve_reminders_mods) as storage:
                 try:
-                    storage[str(self.chat_id)] += f'{self.mod - 1} '
+                    storage[str(self.chat_id)] += f' {self.mod - 1}'
                 except KeyError:
-                    storage[str(self.chat_id)] = f'{self.mod - 1} '
+                    storage[str(self.chat_id)] = f'{self.mod - 1}'
 
         else:
             with shelve.open(self.session_name) as storage:

@@ -68,7 +68,7 @@ async def main_action_of_pyramid_game(call: types.CallbackQuery):
 
 @dp.message_handler(state=NettleBot.waiting_for_answer_in_pyramid_game, content_types=types.ContentTypes.TEXT)
 async def checker_for_answer_in_pyramid_game(message, state):
-    await state.finish
+    await state.finish()
     chat_id = message.chat.id
     game = logic.BotMod(message, config.numbers_answers, logic.get_difficulty(chat_id))
     answer = ''.join(game.get_answer()).replace(' ', '')

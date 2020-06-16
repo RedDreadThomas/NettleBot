@@ -13,10 +13,10 @@ async def reminders_checker():
     reminders_reminders = shelve.open(config.shelve_reminders)
     reminders_mods = shelve.open(config.shelve_reminders_mods)
     for usr in reminders_dates:
-        dates = reminders_dates[usr].split(' ')[:-1]
-        reminders = reminders_reminders[usr].split(' ')[:-1]
-        levels = reminders_levels[usr].split(' ')[:-1]
-        mods = reminders_mods[usr].split(' ')[:-1]
+        dates = reminders_dates[usr].split(' ')
+        reminders = reminders_reminders[usr].split(' ')
+        levels = reminders_levels[usr].split(' ')
+        mods = reminders_mods[usr].split(' ')
         for date in dates:
             cur_date = int(date)
             cur_index = dates.index(date)
@@ -24,9 +24,9 @@ async def reminders_checker():
             cur_level = int(levels[cur_index])
             cur_mod = int(mods[cur_index])
             intervals = logic.intervals_gen(cur_mod)
-            now_time = time.time()
-            print(int(now_time) - cur_date)
-            if int(now_time) - cur_date >= intervals[cur_level]:
+            now_time = int(time.time())
+            print(now_time - cur_date)
+            if now_time - cur_date >= intervals[cur_level]:
                 await bot.send_message(int(usr), f'Вам напоминание! Пришло время повторить изучаемый материал.\n'
                                                  f'{cur_reminder}')
                 if cur_level == len(intervals) - 1:
