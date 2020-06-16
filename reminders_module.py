@@ -25,7 +25,8 @@ async def reminders_checker():
             cur_mod = int(mods[cur_index])
             intervals = logic.intervals_gen(cur_mod)
             now_time = time.time()
-            if (int(now_time) - cur_date) // 60 >= intervals[cur_level]:
+            print(int(now_time) - cur_date)
+            if int(now_time) - cur_date >= intervals[cur_level]:
                 await bot.send_message(int(usr), f'Вам напоминание! Пришло время повторить изучаемый материал.\n'
                                                  f'{cur_reminder}')
                 if cur_level == len(intervals) - 1:
