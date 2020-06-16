@@ -29,9 +29,9 @@ async def show_all_reminders(call):
     await call.message.answer(f"У вас активировано {len(list_of_dates)} нап:")
     for i in range(len(list_of_dates)):
         remained = (int(list_of_dates[i]) + logic.intervals_gen(int(list_of_mods[i]))[int(list_of_levels[i])] *
-                    60 - time.time()) // 60
+                    60 - int(time.time())) // 60
         await call.message.answer(f"Тема: {list_of_reminders[i]}\n"
-                                  f"Режим: {mods[int(list_of_mods[i])]}\n"
+                                  f"Режим: {mods[int(list_of_mods[i]) - 1]}\n"
                                   f"Осталось: {remained} мин до следующего напоминания")
 
 
