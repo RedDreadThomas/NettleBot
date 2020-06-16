@@ -68,7 +68,7 @@ async def main_action_of_strange_letters_game(call):
 
 
 @dp.message_handler(state=NettleBot.waiting_for_answer_in_strange_letters_game, content_types=types.ContentTypes.TEXT)
-async def checker_for_answer_in_strange_letters_game(message):
+async def checker_for_answer_in_strange_letters_game(message, state):
     chat_id = message.chat.id
     game = logic.BotMod(message, config.words_answers, logic.get_difficulty(chat_id))
     answer = game.get_answer()
@@ -78,7 +78,7 @@ async def checker_for_answer_in_strange_letters_game(message):
         await logic.upgrade_user_level(message, 100, game.mod)
         await logic.print_level(message)
     else:
-        await message.answer('Вам стоит еще потренироваться')
+        await message.answer('Вам стоит ещ потренироваться')
         await logic.upgrade_user_level(message)
         await logic.print_level(message)
     keyboard = logic.Markup().pull([emojize(':repeat_button: Еще раз'), emojize(':scroll: Выбрать режим')],
