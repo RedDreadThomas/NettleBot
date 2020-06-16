@@ -23,7 +23,7 @@ async def show_all_reminders(call):
     reminder_level_session = logic.BotMod(call.message, config.shelve_reminders_levels)
     mods = ['Быстрый', 'Долгий']
     list_of_dates = reminder_date_session.get_answer().split(' ')
-    list_of_reminders = reminder_session.get_answer().split('!@$%^&*()_+')
+    list_of_reminders = reminder_session.get_answer().split(' ')
     print(list_of_reminders)
     list_of_mods = reminder_mod_session.get_answer().split(' ')
     list_of_levels = reminder_level_session.get_answer().split(' ')

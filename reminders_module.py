@@ -14,14 +14,15 @@ async def reminders_checker():
     reminders_mods = shelve.open(config.shelve_reminders_mods)
     for usr in reminders_dates:
         dates = reminders_dates[usr].split(' ')
-        reminders = reminders_reminders[usr].split('!@$%^&*()_+')
+        reminders = reminders_reminders[usr].split(' ')
         levels = reminders_levels[usr].split(' ')
         mods = reminders_mods[usr].split(' ')
         for date in dates:
             cur_date = int(date)
-            cur_reminder = reminders[dates.index(date)]
+            cur_reminder = reminders[dates.index(date)].replace('!@$%^&*()_+', ' ')
             cur_level = int(levels[dates.index(date)])
             cur_mod = int(mods[mods[dates.index(date)]])
+            cur_index = dates.index(str(cur_date))
             intervals = logic.intervals_gen(cur_mod)
             now_time = time.time()
             if (int(now_time) - cur_date) // 60 >= intervals[cur_level]:
@@ -30,17 +31,17 @@ async def reminders_checker():
                 if cur_level == len(intervals) - 1:
                     await bot.send_message(int(usr), 'Поздравляем, теперь вы знаете материал намного лучше!\n'
                                                      'Уведомления по этой теме больше не будут приходить')
-                    del dates[dates.index(str(cur_date))]
-                    del levels[levels.index(str(cur_level))]
-                    del reminders[reminders.index(cur_reminder)]
-                    del mods[mods.index(str(cur_mod))]
+                    del dates[cur_index]
+                    del levels[cur_index]
+                    del reminders[cur_index]
+                    del mods[cur_index]
                 else:
-                    dates[dates.index(cur_date)] = str(now_time)
-                    levels[levels.index(cur_level)] = str(int(levels[levels.index(cur_level)]) + 1)
+                    dates[cur_index] = str(now_time)
+                    levels[cur_index] = str(int(levels[cur_index]) + 1)
                     await bot.send_message(int(usr), f'Следующее напоминание придет через {intervals} мин')
             reminders_dates[usr] = ' '.join(dates)
             reminders_levels[usr] = ' '.join(levels)
-            reminders_reminders[usr] = '!@$%^&*()_+'.join(reminders)
+            reminders_reminders[usr] = ' '.join(reminders)
             reminders_mods[usr] = ' '.join(mods)
 
     reminders_dates.close()
