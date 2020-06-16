@@ -9,7 +9,7 @@ from misc import dp
 @dp.callback_query_handler(lambda c: c.data == 'remember_mod1' or c.data == 'remember_mod2')
 async def start_short_reminder_mod(call):
     param = ['быстро', 'качественно']
-    await call.message.answer(f"Введите тему, которую хотите выучиить {param[int(call.data[-1])]}")
+    await call.message.answer(f"Введите тему, которую хотите выучиить {param[int(call.data[-1]) - 1]}")
     reminder_mod_session = logic.BotMod(call.message, config.shelve_reminders_mods, int(call.data[-1]))
     reminder_mod_session.add_user_to_storage()
     await NettleBot.waiting_for_name_in_remembers_new_mod.set()

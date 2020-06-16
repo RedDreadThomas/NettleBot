@@ -4,7 +4,6 @@ from handlers.main_menu_handlers import menu_command
 from misc import dp
 from emoji import emojize
 from aiogram import types
-from handlers.states import NettleBot
 
 
 @dp.callback_query_handler(lambda c: c.data == 'menu1')

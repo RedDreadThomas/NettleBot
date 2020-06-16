@@ -78,7 +78,7 @@ async def checker_for_answer_in_strange_letters_game(message):
     game.finish_session()
     if str(message.text).lower() == str(answer):
         await message.answer('Ух ты, верно!')
-        await logic.upgrade_user_level(message, 100, game.difficulty)
+        await logic.upgrade_user_level(message, 100, game.mod)
         await logic.print_level(message)
     else:
         await message.answer('Вам стоит еще потренироваться')
