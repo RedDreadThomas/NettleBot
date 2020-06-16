@@ -31,11 +31,10 @@ async def pyramid_game(call: types.CallbackQuery):
     keyboard = logic.Markup().pull([emojize(':pleading_face: Легко'), emojize(':grimacing_face: Нормально'),
                                     emojize(':skull_and_crossbones: Сложно')], 'num_difficulty')
     await call.message.answer("Выберите уровень сложности", reply_markup=keyboard)
-    await NettleBot.waiting_for_choose_difficulty_pyramid_game.set()
 
 
 @dp.callback_query_handler(lambda c: c.data == 'num_difficulty1' or c.data == 'num_difficulty2'
-                           or c.data == 'num_difficulty3', state=NettleBot.waiting_for_choose_difficulty_pyramid_game)
+                           or c.data == 'num_difficulty3')
 async def choose_dif_pyramid_game(call: types.CallbackQuery):
     """
     Эта функция запускает игру Пирамидка на выбранной сложности
@@ -45,10 +44,9 @@ async def choose_dif_pyramid_game(call: types.CallbackQuery):
     chat_id = call.message.chat.id
     logic.add_difficulty(chat_id, int(call.data[-1]))
     await starter_numbers_game(call, int(call.data[-1]))
-    await NettleBot.waiting_for_start_pyramid_game.set()
 
 
-@dp.callback_query_handler(lambda c: c.data == "numbers_game1", state=NettleBot.waiting_for_start_pyramid_game)
+@dp.callback_query_handler(lambda c: c.data == "numbers_game1")
 async def main_action_of_pyramid_game(call: types.CallbackQuery):
     """
     Эта функция продолжает игру: Пирамидка

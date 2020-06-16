@@ -31,12 +31,10 @@ async def words_game(call):
     keyboard = logic.Markup().pull([emojize(':pleading_face: Легко'), emojize(':grimacing_face: Нормально'),
                                     emojize(':skull_and_сrossbones: Сложно')], 'words_difficulty')
     await call.message.answer("Выберите уровень сложности", reply_markup=keyboard)
-    await NettleBot.waiting_for_choose_difficulty_strange_letters_game
 
 
 @dp.callback_query_handler(lambda c: c.data == 'words_difficulty1' or c.data == 'words_difficulty2'
-                           or c.data == 'words_difficulty3',
-                           state=NettleBot.waiting_for_choose_difficulty_strange_letters_game)
+                           or c.data == 'words_difficulty3')
 async def choose_dif_strange_letters_game(call):
     """
     Эта функция запускает игру Странные буквы на выбранной сложности
@@ -46,10 +44,9 @@ async def choose_dif_strange_letters_game(call):
     chat_id = call.message.chat.id
     logic.add_difficulty(chat_id, int(call.data[-1]))
     await starter_words_game(call, int(call.data[-1]))
-    await NettleBot.waiting_for_start_strange_letters_game.set()
 
 
-@dp.callback_query_handler(lambda c: c.data == "words_game1", state=NettleBot.waiting_for_start_strange_letters_game)
+@dp.callback_query_handler(lambda c: c.data == "words_game1")
 async def main_action_of_strange_letters_game(call):
     """
     Эта функция продолжает игру: Странные буквы
