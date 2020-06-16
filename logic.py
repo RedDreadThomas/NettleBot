@@ -173,7 +173,7 @@ class BotMod:
         :return: None
         """
         if self.session_name == config.shelve_reminders_dates:
-            now_datetime = str(time.time())
+            now_datetime = str(int(time.time()))
             with shelve.open(config.shelve_reminders_dates) as storage:
                 try:
                     storage[str(self.chat_id)] += now_datetime + ' '
