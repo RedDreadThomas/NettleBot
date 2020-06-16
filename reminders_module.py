@@ -18,22 +18,22 @@ async def reminders_checker():
         levels = reminders_levels[usr].split(' ')
         mods = reminders_mods[usr].split(' ')
         for date in dates:
-            cur_date = date
+            cur_date = int(date)
             cur_reminder = reminders[dates.index(date)]
-            cur_level = levels[dates.index(date)]
-            cur_mod = mods[mods[dates.index(date)]]
+            cur_level = int(levels[dates.index(date)])
+            cur_mod = int(mods[mods[dates.index(date)]])
             intervals = logic.intervals_gen(cur_mod)
             now_time = time.time()
-            if (int(now_time) - int(cur_date)) // 60 >= intervals[cur_level]:
+            if (int(now_time) - cur_date) // 60 >= intervals[cur_level]:
                 await bot.send_message(int(usr), f'Вам напоминание! Пришло время повторить изучаемый материал.\n'
                                                  f'{cur_reminder}')
                 if cur_level == len(intervals) - 1:
                     await bot.send_message(int(usr), 'Поздравляем, теперь вы знаете материал намного лучше!\n'
                                                      'Уведомления по этой теме больше не будут приходить')
-                    del dates[dates.index(cur_date)]
-                    del levels[levels.index(cur_level)]
+                    del dates[dates.index(str(cur_date))]
+                    del levels[levels.index(str(cur_level))]
                     del reminders[reminders.index(cur_reminder)]
-                    del mods[mods.index(cur_mod)]
+                    del mods[mods.index(str(cur_mod))]
                 else:
                     dates[dates.index(cur_date)] = str(now_time)
                     levels[levels.index(cur_level)] = str(int(levels[levels.index(cur_level)]) + 1)
