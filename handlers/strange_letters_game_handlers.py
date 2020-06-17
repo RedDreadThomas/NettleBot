@@ -15,7 +15,7 @@ async def starter_words_game(call, difficulty):
     :param difficulty:
     :return:
     """
-    keyboard = logic.Markup().pull([emojize(':thumbs_up: Да!'), emojize(':left_arrow: Назад')],
+    keyboard = logic.Markup().pull([emojize(':thumbs_up: Да!')],
                                    'words_game')
     await call.message.answer(f"Постарайтесь запомнить последовательность букв ниже за {10 * difficulty} секунд. "
                               "Для наибольшей эффективности, начинайте вводить ответ "

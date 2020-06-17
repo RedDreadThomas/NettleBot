@@ -15,7 +15,7 @@ async def starter_numbers_game(call: types.CallbackQuery, difficulty):
     :param difficulty:
     :return:
     """
-    keyboard = logic.Markup().pull([emojize(':thumbs_up: Да!'), emojize(':left_arrow: Назад')],
+    keyboard = logic.Markup().pull([emojize(':thumbs_up: Да!')],
                                    'numbers_game')
     await call.message.edit_text(f"Постарайтесь запомнить все цифры ниже за {10 * difficulty} секунд. "
                                  "Для наибольшей эффективности, начинайте вводить ответ "
