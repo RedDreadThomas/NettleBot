@@ -41,10 +41,16 @@ async def reminders_checker():
                     levels[cur_index] = str(int(levels[cur_index]) + 1)
                     await bot.send_message(int(usr), f'Следующее напоминание придет через'
                                                      f' {intervals[int(levels[cur_index])] // 60} мин')
-            reminders_dates[usr] = ' '.join(dates)
-            reminders_levels[usr] = ' '.join(levels)
-            reminders_reminders[usr] = ' '.join(reminders)
-            reminders_mods[usr] = ' '.join(mods)
+            if dates:
+                reminders_dates[usr] = ' '.join(dates)
+                reminders_levels[usr] = ' '.join(levels)
+                reminders_reminders[usr] = ' '.join(reminders)
+                reminders_mods[usr] = ' '.join(mods)
+            else:
+                del reminders_dates[usr]
+                del reminders_levels[usr]
+                del reminders_reminders[usr]
+                del reminders_mods[usr]
             print(reminders_dates[usr], reminders_mods[usr], reminders_reminders[usr], reminders_levels[usr])
 
     reminders_dates.close()

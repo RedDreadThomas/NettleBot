@@ -44,7 +44,7 @@ async def print_level(message):
     max_exp = shelve.open(config.shelve_max_exp)
     level = shelve.open(config.shelve_usr_level)
     await message.answer(f"Уровень: {level[str(chat_id)]}\n{now_exp[str(chat_id)]}"
-                                    f" опыта/{max_exp[str(chat_id)]} опыта")
+                         f" опыта/{max_exp[str(chat_id)]} опыта")
 
 
 # Функции отвечаюшие за выбор и хранение сложности игры
@@ -111,7 +111,8 @@ def pyramid(c_str):
 
 def intervals_gen(mod):
     if mod == 0:
-        return [1 * 60, 5 * 60, 15 * 60, 30 * 60]
+        return [1 * 60, 2 * 60]
+        # return [1 * 60, 5 * 60, 15 * 60, 30 * 60]
     return [10 * 60, 60 * 60, 120 * 60]
 
 
