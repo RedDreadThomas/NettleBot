@@ -34,7 +34,7 @@ async def remember_new(call: types.CallbackQuery):
     """
     keyboard = logic.Markup().pull(
                                     [emojize(':stopwatch: Быстро'),
-                                     emojize(':student: Надолго'),
+                                     emojize(':man_student: Надолго'),
                                      emojize(':bookmark: Мои напоминания'),
                                      emojize(':left_arrow: Назад')],
                                     'remember_mod'
@@ -55,8 +55,10 @@ async def repeat_old(call: types.CallbackQuery):
     await informer_message.delete()
 
 
-@dp.callback_query_handler(lambda c: c.data == 'menu4' or c.data == 'exit_from_info1'
-                                     or c.data == 'exit_from_communication1')
+@dp.callback_query_handler(lambda c: c.data == 'menu4'
+                           or c.data == 'exit_from_info1'
+                           or c.data == 'exit_from_communication1'
+                           or c.data == 'remember_mod4')
 async def main_menu(call: types.CallbackQuery):
     """
     Эта функция возвращает пользователя в главное меню
