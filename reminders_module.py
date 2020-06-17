@@ -28,6 +28,7 @@ async def reminders_checker():
             levels = levels.split(' ')
             mods = mods.split(' ')
             for date in dates:
+                keyboard = logic.Markup().pull(['Показать все напоминания'], 'from_reminders_module_to_all_reminders')
                 cur_date = int(date)
                 cur_index = dates.index(date)
                 cur_reminder = reminders[cur_index].replace('!@$%^&*()_+', ' ')
@@ -41,7 +42,8 @@ async def reminders_checker():
                                                      f'{cur_reminder}')
                     if cur_level == len(intervals) - 1:
                         await bot.send_message(int(usr), 'Поздравляем, теперь вы знаете материал намного лучше!\n'
-                                                         'Уведомления по этой теме больше не будут приходить')
+                                                         'Уведомления по этой теме больше не будут приходить',
+                                                         reply_markup=keyboard)
                         del dates[cur_index]
                         del levels[cur_index]
                         del reminders[cur_index]
@@ -50,7 +52,8 @@ async def reminders_checker():
                         dates[cur_index] = str(now_time)
                         levels[cur_index] = str(int(levels[cur_index]) + 1)
                         await bot.send_message(int(usr), f'Следующее напоминание придет через'
-                                                         f' {intervals[int(levels[cur_index])] // 60} мин')
+                                                         f' {intervals[int(levels[cur_index])] // 60} мин',
+                                                         reply_markup=keyboard)
 
             reminders_dates[usr] = ' '.join(dates)
             reminders_levels[usr] = ' '.join(levels)

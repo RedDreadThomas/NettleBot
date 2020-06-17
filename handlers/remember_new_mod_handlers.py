@@ -24,7 +24,7 @@ async def clear_reminder_and_del_message(call):
     await call.message.delete()
 
 
-@dp.callback_query_handler(lambda c: c.data == 'remember_mod3')
+@dp.callback_query_handler(lambda c: c.data == 'remember_mod3', 'from_reminders_module_to_all_reminders1')
 async def show_all_reminders(call):
     reminder_date_session = logic.BotMod(call.message, config.shelve_reminders_dates)
     reminder_session = logic.BotMod(call.message, config.shelve_reminders)
