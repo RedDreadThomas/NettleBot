@@ -38,7 +38,7 @@ async def show_all_reminders(call):
             await call.message.answer(f"Тема: {reminders[i].replace('!@$%^&*()_+', ' ')}\n"
                                       f"Режим: {list_of_mods[int(mods[i])]}\n")
     else:
-        await call.message("У вас не активровано ни одного напоминания")
+        await call.message.answer("У вас не активровано ни одного напоминания")
 
 
 @dp.message_handler(state=NettleBot.waiting_for_name_in_remembers_new_mod, content_types=types.ContentTypes.TEXT)
