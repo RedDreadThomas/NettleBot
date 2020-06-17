@@ -15,7 +15,7 @@ async def start_reminder_mod(call, state: FSMContext):
     keyboard = logic.Markup().pull([emojize(':left_arrow: Назад')], 'cancel_reminder_creation')
     await call.message.answer(f"Введите тему, которую хотите выучить {param[int(call.data[-1]) - 1]}",
                               reply_markup=keyboard)
-    await state.update_data(mod=int(call.data[-1]) - 1)
+    await state.update_data(mod=int(call.data[-1]))
     await NettleBot.waiting_for_name_in_remembers_new_mod.set()
 
 
