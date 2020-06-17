@@ -6,17 +6,23 @@ from emoji import emojize
 from aiogram import types
 
 
-@dp.callback_query_handler(lambda c: c.data == 'menu1')
+@dp.callback_query_handler(lambda c: c.data == 'menu1'
+                           or c.data == "end_words_game2"
+                           or c.data == "end_numbers_game2"
+                           )
 async def choose_game(call: types.CallbackQuery):
     """
     Эта функция отправляет сообщение с выбором игры
     :param call: (types.CallbackQuery)
     :return:
     """
-    keyboard = logic.Markup().pull([emojize(':input_numbers: Пирамидка'),
-                                    emojize(':input_latin_lowercase: Странные буквы'),
-                                    emojize(':scroll: Вернуться к выбору режима')], 'mind_game')
-    await call.message.answer('Выберите один из режимов', reply_markup=keyboard)
+    keyboard = logic.Markup().pull(
+                                    [emojize(':input_numbers: Пирамидка'),
+                                     emojize(':input_latin_lowercase: Странные буквы'),
+                                     emojize(':left_arrow: Назад')],
+                                    'mind_game'
+                                  )
+    await call.message.edit_text('Выберите один из режимов', reply_markup=keyboard)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'menu2')
@@ -26,8 +32,14 @@ async def remember_new(call: types.CallbackQuery):
     :param call: (types.CallbackQuery)
     :return:
     """
-    keyboard = logic.Markup().pull(['Быстро', 'Надолго', 'Текущая тема'], 'remember_mod')
-    await call.message.answer('Выберите режим запоминания:', reply_markup=keyboard)
+    keyboard = logic.Markup().pull(
+                                    [emojize(':stopwatch: Быстро'),
+                                     emojize(':student: Надолго'),
+                                     emojize(':bookmark: Мои напоминания'),
+                                     emojize(':left_arrow: Назад')],
+                                    'remember_mod'
+                                   )
+    await call.message.edit_text('Выберите режим запоминания:', reply_markup=keyboard)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'menu3')

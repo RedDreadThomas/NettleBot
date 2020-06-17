@@ -4,7 +4,9 @@ import time
 import logic
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from handlers.states import NettleBot
 from misc import bot
+from misc import dp
 
 
 async def reminders_checker():
@@ -13,6 +15,9 @@ async def reminders_checker():
     reminders_reminders = shelve.open(config.shelve_reminders)
     reminders_mods = shelve.open(config.shelve_reminders_mods)
     for usr in reminders_dates:
+        cur_state = dp.storage.get_state(int(usr))
+        if cur_state not in NettleBot:
+            continue
         dates = reminders_dates[usr]
         reminders = reminders_reminders[usr]
         levels = reminders_levels[usr]

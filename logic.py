@@ -23,7 +23,7 @@ async def upgrade_user_level(message, exp=0, difficulty=0):
         now_exp[str(chat_id)] = exp * difficulty
         max_exp[str(chat_id)] = 200
         level[str(chat_id)] = 1
-    await message.answer(f"Вы заработали {exp * difficulty} опыта")
+    await message.answer(f"Вы заработали {exp * difficulty} очков опыта")
     if max_exp[str(chat_id)] <= now_exp[str(chat_id)]:
         now_exp[str(chat_id)] -= max_exp[str(chat_id)]
         max_exp[str(chat_id)] *= 2
@@ -111,8 +111,7 @@ def pyramid(c_str):
 
 def intervals_gen(mod):
     if mod == 0:
-        return [1 * 60, 2 * 60]
-        # return [1 * 60, 5 * 60, 15 * 60, 30 * 60]
+        return [1 * 60, 5 * 60, 15 * 60, 30 * 60]
     return [10 * 60, 60 * 60, 120 * 60]
 
 
