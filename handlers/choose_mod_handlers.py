@@ -58,7 +58,7 @@ async def repeat_old(call: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == 'menu4'
                            or c.data == 'exit_from_info1'
                            or c.data == 'exit_from_communication1'
-                           or c.data == 'remember_mod4')
+                           )
 async def main_menu(call: types.CallbackQuery):
     """
     Эта функция возвращает пользователя в главное меню

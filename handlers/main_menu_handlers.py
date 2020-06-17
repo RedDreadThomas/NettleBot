@@ -38,6 +38,7 @@ async def start_command(message: types.Message):
     or c.data == 'mind_game3'
     or c.data == 'words_game2'
     or c.data == 'numbers_game2'
+    or c.data == 'remember_mod4'
 )
 async def choose_mod(call: types.CallbackQuery):
     """
