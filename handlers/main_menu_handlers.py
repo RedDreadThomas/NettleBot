@@ -13,7 +13,7 @@ async def menu_command(message: types.Message):
     """
     keyboard = logic.Markup().pull([emojize(':scroll: Выбрать режим'), emojize(':books: Информация'),
                                     emojize(':telephone_receiver: Связаться с нами')], 'main_menu')
-    await message.answer("Главное меню:", reply_markup=keyboard)
+    await message.edit_text("Главное меню:", reply_markup=keyboard)
 
 
 @dp.message_handler(commands=['start'])
@@ -28,7 +28,9 @@ async def start_command(message: types.Message):
                          'Этот бот создан для того, чтобы помогать вам '
                          'развивать память, не забывать повторять пройденный '
                          'материал и лучше понимать изучаемые темы.')
-    await menu_command(message)
+    keyboard = logic.Markup().pull([emojize(':scroll: Выбрать режим'), emojize(':books: Информация'),
+                                    emojize(':telephone_receiver: Связаться с нами')], 'main_menu')
+    await message.answer("Главное меню:", reply_markup=keyboard)
 
 
 @dp.callback_query_handler(

@@ -15,7 +15,7 @@ async def reminders_checker():
     reminders_reminders = shelve.open(config.shelve_reminders)
     reminders_mods = shelve.open(config.shelve_reminders_mods)
     for usr in reminders_dates:
-        cur_state = dp.storage.get_state(int(usr))
+        cur_state = dp.storage.get_state(chat=int(usr), user=int(usr))
         if cur_state not in NettleBot:
             continue
         dates = reminders_dates[usr]

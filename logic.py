@@ -111,8 +111,8 @@ def pyramid(c_str):
 
 def intervals_gen(mod):
     if mod == 0:
-        return [1 * 60, 5 * 60, 15 * 60, 30 * 60]
-    return [10 * 60, 60 * 60, 120 * 60]
+        return [0, 1200, 28800, 86400]
+    return [0, 1200, 28800, 86400, 172800, 604800, 604800]
 
 
 # Модуль отвечающий за создание кастомных InlineKeyboardMarkup
