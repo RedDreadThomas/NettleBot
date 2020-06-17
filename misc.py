@@ -1,3 +1,5 @@
+#! /usr/bin/python3.7
+# -*- coding = utf-8 -*-
 import config
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage

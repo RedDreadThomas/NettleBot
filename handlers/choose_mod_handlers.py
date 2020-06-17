@@ -1,3 +1,6 @@
+#! /usr/bin/python3.7
+# -*- coding = utf-8 -*-
+
 import logic
 import time
 from handlers.main_menu_handlers import menu_command
