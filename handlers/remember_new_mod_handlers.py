@@ -31,6 +31,7 @@ async def show_all_reminders(call):
         reminders = reminders.split(' ')
         mods = mods.split(' ')
         levels = levels.split(' ')
+        print(levels, dates, mods, reminders)
         await call.message.answer(f"У вас активировано {len(dates)} нап:")
         for i in range(len(dates)):
             #remained = (int(list_of_dates[i]) + logic.intervals_gen(int(list_of_mods[i]))[int(list_of_levels[i])] * 60 - int(time.time())) // 60
